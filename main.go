@@ -93,13 +93,8 @@ func showChangelog() {
 }
 
 func main() {
-	name, err := getStaticName("windows", "amd64")
+	err := buildMain(cliLocation, "app")
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = build(name, "windows", "amd64")
-	if err != nil {
-		log.Fatal(err)
-	}
-
 }

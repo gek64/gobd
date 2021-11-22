@@ -3,16 +3,22 @@ package main
 import (
 	"fmt"
 	"gek_exec"
+	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 )
 
 var (
-	osList   = []string{"android", "darwin", "dragonfly", "freebsd", "illumos", "ios", "js", "linux", "netbsd", "openbsd", "plan9", "solaris", "windows"}
-	archList = []string{"amd64", "386", "arm", "arm64", "ppc64le", "mips64le", "mips64", "mipsle", "mips", "s390x", "wasm"}
+	defaultOSList   = []string{"android", "darwin", "dragonfly", "freebsd", "illumos", "ios", "js", "linux", "netbsd", "openbsd", "plan9", "solaris", "windows"}
+	defaultArchList = []string{"amd64", "386", "arm", "arm64", "ppc64le", "mips64le", "mips64", "mipsle", "mips", "s390x", "wasm"}
+	mainOSList      = []string{"darwin", "linux", "windows"}
+	mainArchList    = []string{"amd64", "386", "arm", "arm64"}
 )
 
+// 功能函数
+// 用于实现基本功能
 // getModuleName 获取模块名称
 func getModuleName() (name string, err error) {
 	// 使用go mod 列出所有的依赖,依赖列表中会包含当前的包名
@@ -31,7 +37,7 @@ func getModuleName() (name string, err error) {
 }
 
 // getStaticName 获取编译后的静态文件名,customName为自定义名称(可选)
-func getStaticName(targetOS string, targetARCH string, customName ...interface{}) (name string, err error) {
+func getStaticName(targetOS string, targetARCH string, customName ...string) (name string, err error) {
 	// 如果使用自定义名称
 	if len(customName) > 0 {
 		name = fmt.Sprintf("%s-%s-%s", customName[0], targetOS, targetARCH)
@@ -52,18 +58,69 @@ func getStaticName(targetOS string, targetARCH string, customName ...interface{}
 }
 
 // build 编译指定的名称,操作系统,系统架构的应用
-func build(name string, targetOS string, targetARCH string) (err error) {
+func build(name string, location string, targetOS string, targetARCH string) (err error) {
 	// 指定编译目标操作系统
 	OS := fmt.Sprintf("GOOS=%s", targetOS)
 	// 指定编译目标系统架构
 	ARCH := fmt.Sprintf("GOARCH=%s", targetARCH)
 	// 编译命令
-	cmd := exec.Command("go", "build", "-v", "-trimpath", "-ldflags", "-s -w", "-o", name)
+	cmd := exec.Command("go", "build", "-v", "-trimpath", "-ldflags", "-s -w", "-o", filepath.Join(location, name))
 	// 指定环境
 	cmd.Env = append(os.Environ(), OS, ARCH)
 
 	// 运行程序
 	err = gek_exec.Run(cmd)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// buildList 按给定的 操作系统/架构列表对 编译,osList为操作系统列表,archList为系统架构,location为存储静态文件的地址,customName为自定义静态文件名(可选)
+func buildList(osList []string, archList []string, location string, customName ...string) (err error) {
+	// 双重循环找出所有的 操作系统/架构列表对
+	for _, OS := range osList {
+		for _, ARCH := range archList {
+			var name = ""
+			if len(customName) > 0 {
+				// 有自定义静态文件名,直接使用自定义静态文件名
+				name, err = getStaticName(OS, ARCH, customName[0])
+				if err != nil {
+					return err
+				}
+			} else {
+				// 无自定义静态文件名,使用应用模块名
+				name, err = getStaticName(OS, ARCH)
+				if err != nil {
+					return err
+				}
+			}
+
+			// 编译
+			err = build(name, location, OS, ARCH)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+	}
+
+	return nil
+}
+
+// 流程函数
+// 用于实现命令行工具的处理流程
+// buildAll 编译所有支持的操作系统和系统架构对的静态文件,location为存储静态文件的地址,customName为自定义静态文件名(可选)
+func buildAll(location string, customName ...string) (err error) {
+	err = buildList(defaultOSList, defaultArchList, location, customName...)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// buildMain 编译主要的操作系统和系统架构对的静态文件,location为存储静态文件的地址,customName为自定义静态文件名(可选)
+func buildMain(location string, customName ...string) (err error) {
+	err = buildList(mainOSList, mainArchList, location, customName...)
 	if err != nil {
 		return err
 	}
