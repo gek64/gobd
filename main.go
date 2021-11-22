@@ -27,7 +27,7 @@ func init() {
 	flag.StringVar(&cliOS, "os", runtime.GOOS, "specify os")
 	flag.StringVar(&cliArch, "arch", runtime.GOARCH, "specify architecture")
 	flag.BoolVar(&cliAll, "all", false, "build all supported os and architecture")
-	flag.BoolVar(&cliMain, "main", false, "build all supported architecture for windows macos linux")
+	flag.BoolVar(&cliMain, "main", false, "build all supported architecture for windows, macos and linux")
 	flag.BoolVar(&cliHelp, "h", false, "show help")
 	flag.BoolVar(&cliVersion, "v", false, "show version")
 	flag.Parse()
