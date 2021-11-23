@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -15,9 +16,11 @@ var (
 	defaultArchList = []string{"amd64", "386", "arm", "arm64", "ppc64le", "mips64le", "mips64", "mipsle", "mips", "s390x", "wasm"}
 	mainOSList      = []string{"darwin", "linux", "windows"}
 	mainArchList    = []string{"amd64", "386", "arm", "arm64"}
+	customOSList    []string
+	customArchList  []string
 )
 
-// 功能函数
+// 基本功能函数
 // 用于实现基本功能
 // getModuleName 获取模块名称
 func getModuleName() (name string, err error) {
@@ -39,7 +42,7 @@ func getModuleName() (name string, err error) {
 // getStaticName 获取编译后的静态文件名,customName为自定义名称(可选)
 func getStaticName(targetOS string, targetARCH string, customName ...string) (name string, err error) {
 	// 如果使用自定义名称
-	if len(customName) > 0 {
+	if len(customName) > 0 && customName[0] != "" {
 		name = fmt.Sprintf("%s-%s-%s", customName[0], targetOS, targetARCH)
 	} else {
 		// 不使用自定义名称,则获取模块名称
@@ -78,13 +81,13 @@ func build(name string, location string, targetOS string, targetARCH string) (er
 
 // buildList 按给定的 操作系统/架构列表对 编译,osList为操作系统列表,archList为系统架构,location为存储静态文件的地址,customName为自定义静态文件名(可选)
 func buildList(osList []string, archList []string, location string, customName ...string) (err error) {
-	// 双重循环找出所有的 操作系统/架构列表对
+	// 双重循环找出操作系统/架构列表对
 	for _, OS := range osList {
 		for _, ARCH := range archList {
 			var name = ""
-			if len(customName) > 0 {
+			if len(customName) > 0 && customName[0] != "" {
 				// 有自定义静态文件名,直接使用自定义静态文件名
-				name, err = getStaticName(OS, ARCH, customName[0])
+				name, err = getStaticName(OS, ARCH, customName...)
 				if err != nil {
 					return err
 				}
@@ -121,6 +124,34 @@ func buildAll(location string, customName ...string) (err error) {
 // buildMain 编译主要的操作系统和系统架构对的静态文件,location为存储静态文件的地址,customName为自定义静态文件名(可选)
 func buildMain(location string, customName ...string) (err error) {
 	err = buildList(mainOSList, mainArchList, location, customName...)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// buildCustom 编译自定义的操作系统和系统架构对的静态文件,location为存储静态文件的地址,customName为自定义静态文件名(可选),如果控制台未指定编译目标,则默使用当前系统的操作系统与系统架构
+func buildCustom(location string, customName ...string) (err error) {
+	// 控制台未指定编译目标,填充为当前系统的操作系统与系统架构
+	if cliOS == "" && cliArch == "" {
+		cliOS = runtime.GOOS
+		cliArch = runtime.GOARCH
+	}
+	// 控制台os参数不为空,则添加进自定义os列表,为空则添加默认列表
+	if cliOS != "" {
+		customOSList = append(customArchList, cliOS)
+	} else {
+		customOSList = append(customOSList, defaultOSList...)
+	}
+	// 控制台arch参数不为空,则添加进自定义arch列表,为空则添加默认列表
+	if cliArch != "" {
+		customArchList = append(customArchList, cliArch)
+	} else {
+		customArchList = append(customArchList, defaultArchList...)
+	}
+
+	// 自定义编译
+	err = buildList(customOSList, customArchList, location, customName...)
 	if err != nil {
 		return err
 	}

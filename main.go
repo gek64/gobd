@@ -6,7 +6,6 @@ import (
 	"gek_toolbox"
 	"log"
 	"os"
-	"runtime"
 )
 
 var (
@@ -24,8 +23,8 @@ var (
 func init() {
 	flag.StringVar(&cliName, "n", "", "set static file name")
 	flag.StringVar(&cliLocation, "d", "bin", "set static file output location")
-	flag.StringVar(&cliOS, "os", runtime.GOOS, "specify os")
-	flag.StringVar(&cliArch, "arch", runtime.GOARCH, "specify architecture")
+	flag.StringVar(&cliOS, "os", "", "specify os")
+	flag.StringVar(&cliArch, "arch", "", "specify architecture")
 	flag.BoolVar(&cliAll, "all", false, "build all supported os and architecture")
 	flag.BoolVar(&cliMain, "main", false, "build all supported architecture for windows, macos and linux")
 	flag.BoolVar(&cliHelp, "h", false, "show help")
@@ -93,8 +92,27 @@ func showChangelog() {
 }
 
 func main() {
-	err := buildMain(cliLocation, "app")
+	// 指定编译全部
+	if cliAll {
+		err := buildAll(cliLocation, cliName)
+		if err != nil {
+			log.Fatal(err)
+		}
+		os.Exit(0)
+	}
+	// 指定编译主要的
+	if cliMain {
+		err := buildMain(cliLocation, cliName)
+		if err != nil {
+			log.Fatal(err)
+		}
+		os.Exit(0)
+	}
+	// 未指定或者指定os/arch自定义编译
+	err := buildCustom(cliLocation, cliName)
 	if err != nil {
 		log.Fatal(err)
 	}
+	os.Exit(0)
+
 }
