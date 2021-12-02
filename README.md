@@ -51,10 +51,10 @@ go build -v -trimpath -ldflags "-s -w"
 
 ## QA
 
-### Q: Windows Security detect .exe as Trojan:Win32/Wacatac.B!ml
-A: This report occurred after win10 21h2. This application does not contain any malware, backdoors, and advertisements, all released files are build by github actions. This problem can be solved by adding this application to the whitelist or compiling by yourself.
+### Q: Windows Security detect `.exe` as `Trojan:Win32/Wacatac.B!ml`
+A: This report occurred after `Windows 10 21h2`. This application does not contain any malware, backdoors, and advertisements, all released files are build by github actions. This problem can be solved by adding this application to the whitelist or compiling by yourself.
 
-### Q: Why should I clone [gek](https://github.com/gek64/gek.git) before building
+### Q: Why should I clone `https://github.com/gek64/gek.git` before building
 A: I don’t want the project to depend on a certain cloud service provider, and this is also a good way to avoid network problems.
 
 
@@ -62,4 +62,4 @@ A: I don’t want the project to depend on a certain cloud service provider, and
 
 **GNU Lesser General Public License v2.1**
 
-See the LICENSE file for details
+See `LICENSE` for details
