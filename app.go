@@ -12,10 +12,10 @@ import (
 )
 
 var (
-	defaultOSList   = []string{"android", "darwin", "dragonfly", "freebsd", "illumos", "ios", "js", "linux", "netbsd", "openbsd", "plan9", "solaris", "windows"}
-	defaultArchList = []string{"amd64", "386", "arm", "arm64", "ppc64le", "mips64le", "mips64", "mipsle", "mips", "s390x", "wasm"}
+	defaultOSList   = []string{"aix", "android", "darwin", "dragonfly", "freebsd", "illumos", "ios", "js", "linux", "netbsd", "openbsd", "plan9", "solaris", "windows"}
+	defaultArchList = []string{"amd64", "386", "arm64", "arm", "mips64", "mips64le", "mips", "mipsle", "ppc64", "ppc64le", "riscv64", "s390x", "wasm"}
 	mainOSList      = []string{"darwin", "linux", "windows"}
-	mainArchList    = []string{"amd64", "386", "arm", "arm64"}
+	mainArchList    = []string{"amd64", "386", "arm64", "arm"}
 	customOSList    []string
 	customArchList  []string
 )

@@ -73,7 +73,7 @@ More Information:
 
 	// 打印版本信息
 	if cliVersion {
-		fmt.Println("v1.00")
+		fmt.Println("v1.01")
 		os.Exit(0)
 	}
 
@@ -87,7 +87,11 @@ More Information:
 func showChangelog() {
 	var versionInfo = `Changelog:
   1.00:
-    - First release`
+    - First release
+  1.01:
+    - Update os/arch list
+    - Support ARCHs add riscv64 
+    - Support OSs add aix`
 	fmt.Println(versionInfo)
 }
 
