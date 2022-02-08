@@ -26,7 +26,7 @@ func init() {
 	flag.StringVar(&cliOS, "os", "", "specify os")
 	flag.StringVar(&cliArch, "arch", "", "specify architecture")
 	flag.BoolVar(&cliAll, "all", false, "build all supported os and architecture")
-	flag.BoolVar(&cliMain, "main", false, "build all supported architecture for windows, macos and linux")
+	flag.BoolVar(&cliMain, "main", false, "build all supported architecture for windows, macos, linux and freebsd")
 	flag.BoolVar(&cliHelp, "h", false, "show help")
 	flag.BoolVar(&cliVersion, "v", false, "show version")
 	flag.Parse()
@@ -73,7 +73,7 @@ More Information:
 
 	// 打印版本信息
 	if cliVersion {
-		fmt.Println("v1.01")
+		fmt.Println("v1.02")
 		os.Exit(0)
 	}
 
@@ -91,7 +91,9 @@ func showChangelog() {
   1.01:
     - Update os/arch list
     - Support ARCHs add riscv64 
-    - Support OSs add aix`
+    - Support OSs add aix
+  1.02:
+    - Add FreeBSD to the main building support list`
 	fmt.Println(versionInfo)
 }
 
