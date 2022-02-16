@@ -27,7 +27,7 @@ Example:
     3) gobuilder -arch amd64              : Build all supported operating systems for amd64
     4) gobuilder -os windows -arch amd64  : Build use Windows and amd64
     5) gobuilder -all                     : Build all supported os and architecture
-    6) gobuilder -main                    : Build all supported architecture for windows, macos and linux
+    6) gobuilder -main                    : Build all supported architecture for windows, macos, linux and freebsd
     7) gobuilder -v                       : Show version
     8) gobuilder -h                       : Show help
 
