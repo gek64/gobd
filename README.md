@@ -1,5 +1,4 @@
 # gobuilder
-GO Builder
 - A tool can help you easily build golang static files for multiple operating systems and architectures
 
 ## Usage
