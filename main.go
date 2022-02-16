@@ -73,7 +73,7 @@ More Information:
 
 	// 打印版本信息
 	if cliVersion {
-		fmt.Println("v1.02")
+		fmt.Println("v1.03")
 		os.Exit(0)
 	}
 
@@ -93,7 +93,9 @@ func showChangelog() {
     - Support ARCHs add riscv64 
     - Support OSs add aix
   1.02:
-    - Add FreeBSD to the main building support list`
+    - Add FreeBSD to the main building support list
+  1.03:
+    - Use "go mod edit -json" to get the package name instead of "go mod graph" to avoid errors when the package has no modules`
 	fmt.Println(versionInfo)
 }
 

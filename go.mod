@@ -1,7 +1,5 @@
 module gobuilder
 
-go 1.17
-
 require (
 	gek_exec v0.0.0
 	gek_toolbox v0.0.0

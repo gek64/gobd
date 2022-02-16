@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"gek_exec"
 	"log"
@@ -24,19 +25,28 @@ var (
 // 用于实现基本功能
 // getModuleName 获取模块名称
 func getModuleName() (name string, err error) {
-	// 使用go mod 列出所有的依赖,依赖列表中会包含当前的包名
-	output, err := gek_exec.Output("go mod graph")
+	var mod Mod
+
+	// 使用 go mod edit -json 列出模块信息
+	output, err := gek_exec.Output("go mod edit -json")
 	if err != nil {
 		return "", err
 	}
-	// 按空格分词
-	modInfo := strings.Fields(output)
-	// 检查包名称中是否含有错误的字符,同时也能检查包名是否为链接
-	if strings.ContainsAny(modInfo[0], "\\/:*?\"<>|") {
-		return "", fmt.Errorf("%s is an invalid name", modInfo[0])
+
+	// json解码到mod
+	err = json.Unmarshal([]byte(output), &mod)
+	if err != nil {
+		return "", err
 	}
 
-	return modInfo[0], nil
+	// mod中提取出模块名称
+	modName := mod.Module.Path
+	// 检查模块名称中是否含有错误的字符,同时也能检查包名是否为链接
+	if strings.ContainsAny(modName, "\\/:*?\"<>|") {
+		return "", fmt.Errorf("%s is an invalid name", modName)
+	}
+
+	return modName, nil
 }
 
 // getStaticName 获取编译后的静态文件名,customName为自定义名称(可选)
