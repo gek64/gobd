@@ -12,7 +12,7 @@ Options:
     -os     operatingSystem  : specify os
     -arch   architecture     : specify architecture
     -all                     : build all supported os and architecture
-    -main                    : build all supported architecture for windows macos linux
+    -main                    : build all supported architecture for windows, macos, linux and freebsd
 
 Command:
     -h                       : Show help
