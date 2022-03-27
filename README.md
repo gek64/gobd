@@ -49,7 +49,6 @@ chmod +x /usr/local/bin/gobuilder
 ## Compile
 ### How to compile if prebuilt binaries are not found
 ```sh
-git clone https://github.com/gek64/gek.git
 git clone https://github.com/gek64/gobuilder.git
 cd gobuilder
 go build -v -trimpath -ldflags "-s -w"
