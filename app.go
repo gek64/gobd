@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"gek_exec"
 	"log"
 	"os"
 	"os/exec"
@@ -28,7 +27,7 @@ func getModuleName() (name string, err error) {
 	var mod Mod
 
 	// 使用 go mod edit -json 列出模块信息
-	output, err := gek_exec.Output("go mod edit -json")
+	output, err := exec.Command("go", "mod", "edit", "-json").Output()
 	if err != nil {
 		return "", err
 	}
@@ -82,7 +81,10 @@ func build(name string, location string, targetOS string, targetARCH string) (er
 	cmd.Env = append(os.Environ(), OS, ARCH)
 
 	// 运行程序
-	err = gek_exec.Run(cmd)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stdout
+	cmd.Stdin = os.Stdin
+	err = cmd.Run()
 	if err != nil {
 		return err
 	}

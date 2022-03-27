@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"gek_toolbox"
 	"log"
 	"os"
+	"os/exec"
 )
 
 var (
@@ -42,7 +42,7 @@ Options:
     -os     operatingSystem  : specify os
     -arch   architecture     : specify architecture
     -all                     : build all supported os and architecture
-    -main                    : build all supported architecture for windows macos linux
+    -main                    : build all supported architecture for windows, macos, linux and freebsd
 
 Command:
     -h                       : Show help
@@ -55,7 +55,7 @@ Example:
     3) gobuilder -arch amd64              : Build all supported operating systems for amd64
     4) gobuilder -os windows -arch amd64  : Build use Windows and amd64
     5) gobuilder -all                     : Build all supported os and architecture
-    6) gobuilder -main                    : Build all supported architecture for windows, macos and linux
+    6) gobuilder -main                    : Build all supported architecture for windows, macos, linux and freebsd
     7) gobuilder -v                       : Show version
     8) gobuilder -h                       : Show help
 
@@ -73,14 +73,16 @@ More Information:
 
 	// 打印版本信息
 	if cliVersion {
-		fmt.Println("v1.03")
+		fmt.Println("v1.04")
 		os.Exit(0)
 	}
 
-	// 检查运行库是否完整
-	err := gek_toolbox.CheckToolbox(toolbox)
-	if err != nil {
-		log.Fatal(err)
+	// 检查依赖
+	for _, tool := range toolbox {
+		_, err := exec.LookPath(tool)
+		if err != nil {
+			log.Panicf("install %s before running", tool)
+		}
 	}
 }
 
@@ -95,7 +97,9 @@ func showChangelog() {
   1.02:
     - Add FreeBSD to the main building support list
   1.03:
-    - Use "go mod edit -json" to get the package name instead of "go mod graph" to avoid errors when the package has no modules`
+    - Use "go mod edit -json" to get the package name instead of "go mod graph" to avoid errors when the package has no modules
+  1.04:
+    - Removed software dependencies for easier use`
 	fmt.Println(versionInfo)
 }
 
@@ -121,6 +125,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	os.Exit(0)
-
 }
