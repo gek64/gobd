@@ -76,7 +76,7 @@ func build(name string, location string, targetOS string, targetARCH string) (er
 	// 指定编译目标系统架构
 	ARCH := fmt.Sprintf("GOARCH=%s", targetARCH)
 	// 编译命令
-	cmd := exec.Command("go", "build", "-v", "-trimpath", "-ldflags", "-s -w", "-o", filepath.Join(location, name))
+	cmd := exec.Command("go", "build", "-v", "-trimpath", "-ldflags", "-s -w -extldflags -static", "-o", filepath.Join(location, name))
 	// 指定环境
 	cmd.Env = append(os.Environ(), OS, ARCH)
 
