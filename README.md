@@ -51,7 +51,7 @@ chmod +x /usr/local/bin/gobuilder
 ```sh
 git clone https://github.com/gek64/gobuilder.git
 cd gobuilder
-go build -v -trimpath -ldflags "-s -w -extldflags -static"
+go build -v -trimpath -ldflags "-s -w"
 ```
 
 ## QA
