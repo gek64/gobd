@@ -47,7 +47,7 @@ jobs:
           git clone https://github.com/gek64/gobuilder.git
           cd gobuilder
           go mod tidy
-          go build -v -trimpath -ldflags "-s -w -extldflags -static" -o "${{ github.workspace }}/gobuilder_runner"
+          go build -v -trimpath -ldflags "-s -w" -o "${{ github.workspace }}/gobuilder_runner"
           chmod +x "${{ github.workspace }}/gobuilder_runner"
           cd ${{ github.workspace }}
 
