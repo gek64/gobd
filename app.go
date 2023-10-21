@@ -69,8 +69,28 @@ func getStaticName(targetOS string, targetARCH string, customName ...string) (na
 	return name, nil
 }
 
+// clean 清除 golang 编译缓存
+func clean() (err error) {
+	cmd := exec.Command("go", "clean", "-cache")
+	// 运行程序
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stdout
+	cmd.Stdin = os.Stdin
+	err = cmd.Run()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // build 编译指定的名称,操作系统,系统架构的应用
 func build(name string, location string, targetOS string, targetARCH string) (err error) {
+	// 清除缓存
+	err = clean()
+	if err != nil {
+		return err
+	}
+
 	// 指定编译目标操作系统
 	OS := fmt.Sprintf("GOOS=%s", targetOS)
 	// 指定编译目标系统架构

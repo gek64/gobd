@@ -1,7 +1,9 @@
 # gobuilder
+
 - A tool can help you easily build golang static files for multiple operating systems and architectures
 
 ## Usage
+
 ```
 Usage:
     gobuilder [Options] [Commands]
@@ -36,6 +38,7 @@ More Information:
 ```
 
 ## Install
+
 ```sh
 # system is linux(debian,redhat linux,ubuntu,fedora...) and arch is amd64
 curl -Lo /usr/local/bin/gobuilder https://github.com/gek64/gobuilder/releases/latest/download/gobuilder-linux-amd64
@@ -47,7 +50,9 @@ chmod +x /usr/local/bin/gobuilder
 ```
 
 ## Compile
+
 ### How to compile if prebuilt binaries are not found
+
 ```sh
 git clone https://github.com/gek64/gobuilder.git
 cd gobuilder
@@ -55,9 +60,13 @@ go build -v -trimpath -ldflags "-s -w"
 ```
 
 ## QA
+
 ### Q: Windows Security detect `.exe` as `Trojan:Win32/Wacatac.B!ml`
-A: This application does not contain any malware, backdoors, and advertisements, all released files are build by github actions. For more information, see https://go.dev/doc/faq#virus
+
+A: This application does not contain any malware, backdoors, and advertisements, all released files are build by github
+actions. For more information, see https://go.dev/doc/faq#virus
 
 ## License
+
 - **GPL-3.0 License**
 - See `LICENSE` for details
