@@ -78,7 +78,7 @@ func build(name string, location string, targetOS string, targetARCH string) (er
 
 	// 编译命令
 	cmd := &exec.Cmd{}
-	if targetARCH == "amd64" && (targetOS == "linux" || targetOS == "freebsd") {
+	if targetARCH == "amd64" && targetOS == "linux" {
 		// 静态链接 glibc
 		cmd = exec.Command("go", "build", "-v", "-trimpath", "-ldflags", "-s -w -extldflags -static", "-o", filepath.Join(location, name))
 	} else {
