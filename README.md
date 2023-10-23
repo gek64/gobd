@@ -5,14 +5,15 @@
 ## Usage
 
 ```
-Usage:
+Usage:                            
     gobuilder [Options] [Commands]
-
-Options:
+                                  
+Options:                          
     -n      name             : set static file name
     -d      location         : set static file output location
     -os     operatingSystem  : specify os
     -arch   architecture     : specify architecture
+    -cmd    commands         : use custom build commands
     -all                     : build all supported os and architecture
     -main                    : build all supported architecture for windows, macos, linux and freebsd
 
@@ -34,7 +35,6 @@ Example:
 More Information:
     1) Visit https://golang.org/doc/install/source#environment for more information on supported operating system and architecture
     2) You may need to install gcc to build some special os and arch pairs,such as android/386 and android/amd64 and android/arm
-
 ```
 
 ## Install
