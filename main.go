@@ -13,6 +13,7 @@ var (
 	cliLocation string
 	cliOS       string
 	cliArch     string
+	cliCommand  string
 	cliAll      bool
 	cliMain     bool
 	cliHelp     bool
@@ -25,6 +26,7 @@ func init() {
 	flag.StringVar(&cliLocation, "d", "bin", "set static file output location")
 	flag.StringVar(&cliOS, "os", "", "specify os")
 	flag.StringVar(&cliArch, "arch", "", "specify architecture")
+	flag.StringVar(&cliCommand, "cmd", "", "use custom build commands")
 	flag.BoolVar(&cliAll, "all", false, "build all supported os and architecture")
 	flag.BoolVar(&cliMain, "main", false, "build all supported architecture for windows, macos, linux and freebsd")
 	flag.BoolVar(&cliHelp, "h", false, "show help")
@@ -41,6 +43,7 @@ Options:
     -d      location         : set static file output location
     -os     operatingSystem  : specify os
     -arch   architecture     : specify architecture
+    -cmd    commands         : use custom build commands
     -all                     : build all supported os and architecture
     -main                    : build all supported architecture for windows, macos, linux and freebsd
 
@@ -73,7 +76,7 @@ More Information:
 
 	// 打印版本信息
 	if cliVersion {
-		fmt.Println("v1.04")
+		fmt.Println("v1.05")
 		os.Exit(0)
 	}
 
@@ -99,7 +102,9 @@ func showChangelog() {
   1.03:
     - Use "go mod edit -json" to get the package name instead of "go mod graph" to avoid errors when the package has no modules
   1.04:
-    - Removed software dependencies for easier use`
+    - Removed software dependencies for easier use
+  1.05:
+    - Support custom build command`
 	fmt.Println(versionInfo)
 }
 

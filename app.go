@@ -69,6 +69,12 @@ func getStaticName(targetOS string, targetARCH string, customName ...string) (na
 	return name, nil
 }
 
+// stringToCmd 字符串按空格分词转换为 *exec.Cmd
+func stringToCmd(cmdString string) (cmd *exec.Cmd) {
+	cmdArgs := strings.Fields(cmdString)
+	return exec.Command(cmdArgs[0], cmdArgs[1:]...)
+}
+
 // clean 清除 golang 编译缓存
 func clean() (err error) {
 	cmd := exec.Command("go", "clean", "-cache")
@@ -98,7 +104,9 @@ func build(name string, location string, targetOS string, targetARCH string) (er
 
 	// 编译命令
 	cmd := &exec.Cmd{}
-	if targetARCH == "amd64" && targetOS == "linux" {
+	if cliCommand != "" {
+		cmd = stringToCmd(cliCommand)
+	} else if targetARCH == "amd64" && targetOS == "linux" {
 		// 静态链接 glibc
 		cmd = exec.Command("go", "build", "-v", "-trimpath", "-ldflags", "-s -w -extldflags -static", "-o", filepath.Join(location, name))
 	} else {
