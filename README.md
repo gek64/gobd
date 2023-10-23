@@ -13,7 +13,6 @@ Options:
     -d      location         : set static file output location
     -os     operatingSystem  : specify os
     -arch   architecture     : specify architecture
-    -cmd    commands         : use custom build commands
     -all                     : build all supported os and architecture
     -main                    : build all supported architecture for windows, macos, linux and freebsd
 
