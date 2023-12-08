@@ -1,6 +1,6 @@
 # GO Builder(GOBD)
 
-- A tool can help you easily build golang static files for multiple operating systems and architectures
+- A Golang build tool that helps you easily build files for multiple operating systems and architectures
 
 ## Usage
 
