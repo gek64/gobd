@@ -77,3 +77,8 @@ jobs:
           generateReleaseNotes: true
           removeArtifacts: true
           replacesArtifacts: true
+
+      - name: Remove old artifacts
+        uses: c-hive/gha-remove-artifacts@v1
+        with:
+          age: "0s"
