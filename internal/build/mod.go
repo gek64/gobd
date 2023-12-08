@@ -2,9 +2,9 @@ package build
 
 import (
 	"encoding/json"
-	"fmt"
+	"net/url"
 	"os/exec"
-	"strings"
+	"path"
 )
 
 type Mod struct {
@@ -24,17 +24,15 @@ func GetModuleName() (name string, err error) {
 	}
 
 	// json解码到mod
-	err = json.Unmarshal([]byte(output), &mod)
+	err = json.Unmarshal(output, &mod)
 	if err != nil {
 		return "", err
 	}
 
 	// mod中提取出模块名称
-	modName := mod.Module.Path
-	// 检查模块名称中是否含有错误的字符,同时也能检查包名是否为链接
-	if strings.ContainsAny(modName, "\\/:*?\"<>|") {
-		return "", fmt.Errorf("%s is an invalid name", modName)
+	modURL, err := url.Parse(mod.Module.Path)
+	if err != nil {
+		return "", err
 	}
-
-	return modName, nil
+	return path.Base(modURL.Path), nil
 }
