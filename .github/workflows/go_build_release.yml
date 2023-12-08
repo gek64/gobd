@@ -28,7 +28,7 @@ on:
         # use ${{ github.event.inputs.tag }}
 
 jobs:
-  build:
+  job1:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -59,14 +59,6 @@ jobs:
 
           # 获取sha256 checksum
           sha256sum bin/* > bin/SHA256SUMS.txt
-
-      - name: Remove old Releases
-        uses: dev-drprasad/delete-older-releases@v0.3.2
-        with:
-          keep_latest: 0
-          delete_tags: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Release
         uses: ncipollo/release-action@v1
