@@ -74,3 +74,6 @@ jobs:
           artifacts: "bin/*"
           tag: ${{ env.VERSION }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          generateReleaseNotes: true
+          removeArtifacts: true
+          replacesArtifacts: true
