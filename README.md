@@ -5,7 +5,20 @@
 ## Usage
 
 ```
+# build local runtime pairs without debug and cgo
+gobd -no_debug -no_cgo
 
+# build linux-amd64 pair
+gobd -os linux -arch amd64 -no_debug -no_cgo
+
+# build linux-mipsle pair with env 'GOMIPS=softfloat'
+gobd -os linux -arch mipsle -no_debug -no_cgo -envs 'GOMIPS=softfloat'
+
+# build all os-arch pairs and show the build process
+gobd -os linux -arch amd64 -d bin -no_debug -no_cgo -opts '-v'
+
+# build all supported architectures for windows, macos, linux and freebsd
+gobd -main -d bin -no_debug -no_cgo
 ```
 
 ## Install
@@ -26,7 +39,7 @@ chmod +x /usr/local/bin/gobd
 
 ```sh
 git clone https://github.com/gek64/gobd.git
-cd gobuilder
+cd gobd
 export CGO_ENABLED=0 
 go build -trimpath -ldflags "-s -w"
 ```

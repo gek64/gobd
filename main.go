@@ -55,12 +55,12 @@ func main() {
 		},
 		&cli.BoolFlag{
 			Name:        "no_debug",
-			Usage:       "set build use -trimpath -ldflags '-s -w'",
+			Usage:       "set build not using debug options to reduce compile size",
 			Destination: &build_no_debug,
 		},
 		&cli.BoolFlag{
 			Name:        "no_cgo",
-			Usage:       "set build not use cgo",
+			Usage:       "set build not using cgo to avoid relying on the host operating system's native libraries",
 			Destination: &build_no_cgo,
 		},
 		&cli.StringSliceFlag{
