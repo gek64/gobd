@@ -87,6 +87,7 @@ func main() {
 		Action: func(ctx *cli.Context) error {
 			var ps []build.Pair
 
+			// 获取编译的操作系统/处理器架构对
 			if build_main {
 				ps = build.GetMainPairs()
 			} else if build_all {
@@ -94,7 +95,12 @@ func main() {
 			} else {
 				ps = build.GetSelectedPairs(build_os, build_arch)
 			}
+			// 获取不到操作系统/处理器架构对则返回错误
+			if len(ps) == 0 {
+				return fmt.Errorf("can't find any pair")
+			}
 
+			// 遍历操作系统/处理器架构对进行编译
 			for _, p := range ps {
 				err := build.Build(p.OS, p.ARCH, build_output_name, build_output_directory, build_no_debug, build_no_cgo, build_opts.Value(), build_envs.Value())
 				if err != nil {

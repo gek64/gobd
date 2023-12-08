@@ -1,20 +1,20 @@
 name: Go Build and Release
 
 on:
-  #  push:
-  #    branches: [ main ]
-  #    paths-ignore:
-  #      - 'docs/**'
-  #      - '.github/**'
-  #      - '**.md'
-  #      - 'LICENSE'
-  #  pull_request:
-  #    branches: [ main ]
-  #    paths-ignore:
-  #      - 'docs/**'
-  #      - '.github/**'
-  #      - '**.md'
-  #      - 'LICENSE'
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
+      - '.github/**'
+      - '**.md'
+      - 'LICENSE'
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
+      - '.github/**'
+      - '**.md'
+      - 'LICENSE'
   workflow_dispatch:
     inputs:
       version:
@@ -41,19 +41,17 @@ jobs:
           git clone https://github.com/gek64/gek.git
           ln -s ${{ github.workspace }}/gek ../gek
 
-          mkdir -p bin
-
           # 编译批量编译程序
-          git clone https://github.com/gek64/gobuilder.git
-          cd gobuilder
+          git clone https://github.com/gek64/gobd.git
+          cd gobd
           go mod tidy
-          go build -v -trimpath -ldflags "-s -w" -o "${{ github.workspace }}/gobuilder_runner"
-          chmod +x "${{ github.workspace }}/gobuilder_runner"
+          go build -v -trimpath -ldflags "-s -w" -o "${{ github.workspace }}/gobd_runner"
+          chmod +x "${{ github.workspace }}/gobd_runner"
           cd ${{ github.workspace }}
 
           # 编译所有支持的架构/系统对
           go mod tidy
-          "${{ github.workspace }}/gobuilder_runner" -main -d bin
+          "${{ github.workspace }}/gobd_runner" -main -d bin -no_debug -no_cgo
 
           # 显示文件路径(debug)
           # ls .. -R -las
