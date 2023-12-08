@@ -1,127 +1,111 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"github.com/urfave/cli/v2"
+	"gobd/internal/build"
 	"log"
 	"os"
-	"os/exec"
 )
-
-var (
-	cliName     string
-	cliLocation string
-	cliOS       string
-	cliArch     string
-	cliAll      bool
-	cliMain     bool
-	cliHelp     bool
-	cliVersion  bool
-	toolbox     = []string{"go"}
-)
-
-func init() {
-	flag.StringVar(&cliName, "n", "", "set static file name")
-	flag.StringVar(&cliLocation, "d", "bin", "set static file output location")
-	flag.StringVar(&cliOS, "os", "", "specify os")
-	flag.StringVar(&cliArch, "arch", "", "specify architecture")
-	flag.BoolVar(&cliAll, "all", false, "build all supported os and architecture")
-	flag.BoolVar(&cliMain, "main", false, "build all supported architecture for windows, macos, linux and freebsd")
-	flag.BoolVar(&cliHelp, "h", false, "show help")
-	flag.BoolVar(&cliVersion, "v", false, "show version")
-	flag.Parse()
-
-	// 重写显示用法函数
-	flag.Usage = func() {
-		var helpInfo = `Usage:
-    gobuilder [Options] [Commands]
-
-Options:
-    -n      name             : set static file name
-    -d      location         : set static file output location
-    -os     operatingSystem  : specify os
-    -arch   architecture     : specify architecture
-    -all                     : build all supported os and architecture
-    -main                    : build all supported architecture for windows, macos, linux and freebsd
-
-Command:
-    -h                       : Show help
-    -v                       : Show version
-
-Example:
-    0) gobuilder                          : Built using the operating system and architecture of the current system
-    1) gobuilder -n myapp -d bin          : Build with the name myapp and put the output files into the bin folder
-    2) gobuilder -os windows              : Build all supported architectures for Windows
-    3) gobuilder -arch amd64              : Build all supported operating systems for amd64
-    4) gobuilder -os windows -arch amd64  : Build use Windows and amd64
-    5) gobuilder -all                     : Build all supported os and architecture
-    6) gobuilder -main                    : Build all supported architecture for windows, macos, linux and freebsd
-    7) gobuilder -v                       : Show version
-    8) gobuilder -h                       : Show help
-
-More Information:
-    1) Visit https://golang.org/doc/install/source#environment for more information on supported operating system and architecture
-    2) You may need to install gcc to build some special os and arch pairs,such as android/386 and android/amd64 and android/arm`
-		fmt.Println(helpInfo)
-	}
-
-	// 打印用法
-	if cliHelp {
-		flag.Usage()
-		os.Exit(0)
-	}
-
-	// 打印版本信息
-	if cliVersion {
-		fmt.Println("v1.04")
-		os.Exit(0)
-	}
-
-	// 检查依赖
-	for _, tool := range toolbox {
-		_, err := exec.LookPath(tool)
-		if err != nil {
-			log.Panicf("install %s before running", tool)
-		}
-	}
-}
-
-func showChangelog() {
-	var versionInfo = `Changelog:
-  1.00:
-    - First release
-  1.01:
-    - Update os/arch list
-    - Support ARCHs add riscv64 
-    - Support OSs add aix
-  1.02:
-    - Add FreeBSD to the main building support list
-  1.03:
-    - Use "go mod edit -json" to get the package name instead of "go mod graph" to avoid errors when the package has no modules
-  1.04:
-    - Removed software dependencies for easier use`
-	fmt.Println(versionInfo)
-}
 
 func main() {
-	// 指定编译全部
-	if cliAll {
-		err := buildAll(cliLocation, cliName)
-		if err != nil {
-			log.Fatal(err)
-		}
-		os.Exit(0)
+	var build_all bool
+	var build_main bool
+	var build_no_debug bool
+	var build_no_cgo bool
+	var build_os string
+	var build_arch string
+	var build_output_directory string
+	var build_output_name string
+	var build_opts cli.StringSlice
+	var build_envs cli.StringSlice
+
+	flags := []cli.Flag{
+		&cli.BoolFlag{
+			Name:        "all",
+			Usage:       "set build all supported os and architecture",
+			Destination: &build_all,
+		},
+		&cli.BoolFlag{
+			Name:        "main",
+			Usage:       "set build all supported architecture for windows, macos, linux and freebsd",
+			Destination: &build_main,
+		},
+		&cli.StringFlag{
+			Name:        "os",
+			Usage:       "set build operating system",
+			Destination: &build_os,
+		},
+		&cli.StringFlag{
+			Name:        "arch",
+			Usage:       "set build architecture",
+			Destination: &build_arch,
+		},
+		&cli.StringFlag{
+			Name:        "name",
+			Aliases:     []string{"n"},
+			Usage:       "set build output name",
+			Destination: &build_output_name,
+		},
+		&cli.StringFlag{
+			Name:        "dir",
+			Aliases:     []string{"d"},
+			Usage:       "set build output directory",
+			Destination: &build_output_directory,
+		},
+		&cli.BoolFlag{
+			Name:        "no_debug",
+			Usage:       "set build use -trimpath -ldflags '-s -w'",
+			Destination: &build_no_debug,
+		},
+		&cli.BoolFlag{
+			Name:        "no_cgo",
+			Usage:       "set build not use cgo",
+			Destination: &build_no_cgo,
+		},
+		&cli.StringSliceFlag{
+			Name:        "opts",
+			Usage:       "set build opts",
+			Destination: &build_opts,
+		},
+		&cli.StringSliceFlag{
+			Name:        "envs",
+			Usage:       "set build envs",
+			Destination: &build_envs,
+		},
 	}
-	// 指定编译主要的
-	if cliMain {
-		err := buildMain(cliLocation, cliName)
-		if err != nil {
-			log.Fatal(err)
-		}
-		os.Exit(0)
+
+	// 打印版本函数
+	cli.VersionPrinter = func(cCtx *cli.Context) {
+		fmt.Printf("%s", cCtx.App.Version)
 	}
-	// 未指定或者指定os/arch自定义编译
-	err := buildCustom(cliLocation, cliName)
+
+	app := &cli.App{
+		Usage:   "Golang Build Tool",
+		Version: "v2.00",
+		Flags:   flags,
+		Action: func(ctx *cli.Context) error {
+			var ps []build.Pair
+
+			if build_main {
+				ps = build.GetMainPairs()
+			} else if build_all {
+				ps = build.GetAllPairs()
+			} else {
+				ps = build.GetSelectedPairs(build_os, build_arch)
+			}
+
+			for _, p := range ps {
+				err := build.Build(p.OS, p.ARCH, build_output_name, build_output_directory, build_no_debug, build_no_cgo, build_opts.Value(), build_envs.Value())
+				if err != nil {
+					log.Println(err)
+				}
+			}
+			return nil
+		},
+	}
+
+	err := app.Run(os.Args)
 	if err != nil {
 		log.Fatal(err)
 	}
