@@ -9,6 +9,7 @@ type Pair struct {
 	ARCH string
 }
 
+// Pairs https://go.dev/doc/install/source#environment
 var Pairs = []Pair{
 	{OS: "aix", ARCH: "ppc64"},
 	{OS: "android", ARCH: "386"},

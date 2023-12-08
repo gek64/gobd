@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-// GetName 获取编译后的静态文件名,customName为自定义名称(可选)
+// GetName 获取编译后的静态文件名,customName为自定义名称(可为空)
 func GetName(targetOS string, targetARCH string, customName string) (name string, err error) {
 	// 如果使用自定义名称
 	if customName != "" {
