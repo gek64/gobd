@@ -2,6 +2,8 @@ github.com/cpuguy83/go-md2man/v2 v2.0.3 h1:qMCsGGgs+MAzDFyp9LpAe1Lqy/fY/qCovCm0q
 github.com/cpuguy83/go-md2man/v2 v2.0.3/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/gek64/gek v1.1.1-0.20231203074137-da484b93af1e h1:cRA3IaX4n2cdyBtKM5qLP5KjZD9hkYk8XB+9iR02dmo=
 github.com/gek64/gek v1.1.1-0.20231203074137-da484b93af1e/go.mod h1:FyV0ATHA/YsebdqB27jEkuNUdpAuFhCPNmyJcbkC9nk=
+github.com/gek64/gek v1.1.1-0.20231213065838-ccb663823d94 h1:muKRvKVnhHXB4MhGQctnDoJv1yRdp61zah/DIt5JVE8=
+github.com/gek64/gek v1.1.1-0.20231213065838-ccb663823d94/go.mod h1:lMjX11RAL+bdrcYglnFoQQFsUXrgR5odUTWLZlg4Mj8=
 github.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf35Ld67mk=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/urfave/cli/v2 v2.26.0 h1:3f3AMg3HpThFNT4I++TKOejZO8yU55t3JnnSr4S4QEI=

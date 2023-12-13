@@ -3,7 +3,7 @@ module gobd
 go 1.21.4
 
 require (
-	github.com/gek64/gek v1.1.1-0.20231203074137-da484b93af1e
+	github.com/gek64/gek v1.1.1-0.20231213065838-ccb663823d94
 	github.com/urfave/cli/v2 v2.26.0
 )
 
