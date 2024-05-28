@@ -84,14 +84,17 @@ func main() {
 		Usage:   "Golang Build Tool",
 		Version: "v2.00",
 		Flags:   flags,
-		Action: func(ctx *cli.Context) error {
+		Action: func(ctx *cli.Context) (err error) {
 			var ps []build.Pair
 
 			// 获取编译的操作系统/处理器架构对
 			if build_main {
 				ps = build.GetMainPairs()
 			} else if build_all {
-				ps = build.GetAllPairs()
+				ps, err = build.GetAllPairs()
+				if err != nil {
+					return err
+				}
 			} else {
 				ps = build.GetSelectedPairs(build_os, build_arch)
 			}
@@ -102,7 +105,7 @@ func main() {
 
 			// 遍历操作系统/处理器架构对进行编译
 			for _, p := range ps {
-				err := build.Build(p.OS, p.ARCH, build_output_name, build_output_directory, build_no_debug, build_no_cgo, build_opts.Value(), build_envs.Value())
+				err = build.Build(p.OS, p.ARCH, build_output_name, build_output_directory, build_no_debug, build_no_cgo, build_opts.Value(), build_envs.Value())
 				if err != nil {
 					log.Println(err)
 				}
